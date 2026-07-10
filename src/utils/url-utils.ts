@@ -3,6 +3,7 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 
 import { permalinkConfig } from "../config";
+import { getPostPathWithoutLanguage } from "./localized-url";
 import { generatePermalinkSlug } from "./permalink-utils";
 
 /**
@@ -26,7 +27,7 @@ function joinUrl(...parts: string[]): string {
 
 export function getPostUrlBySlug(slug: string): string {
 	// 移除文件扩展名（如 .md, .mdx 等）
-	const slugWithoutExt = removeFileExtension(slug);
+	const slugWithoutExt = getPostPathWithoutLanguage(removeFileExtension(slug));
 	return url(`/posts/${slugWithoutExt}/`);
 }
 

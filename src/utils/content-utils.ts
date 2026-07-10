@@ -3,6 +3,14 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { initPostIdMap } from "@utils/permalink-utils";
 import { getCategoryUrl, getPostUrl } from "@utils/url-utils";
+import { getCurrentSiteLanguage } from "./site-language";
+
+function isCurrentLanguagePost(
+	post: { data: { lang?: string } },
+	currentLanguage = getCurrentSiteLanguage(),
+) {
+	return (post.data.lang || currentLanguage) === currentLanguage;
+}
 
 // // Retrieve posts and sort them by publication date
 async function getRawSortedPosts() {
@@ -10,7 +18,11 @@ async function getRawSortedPosts() {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 
-	const sorted = allBlogPosts.sort((a, b) => {
+	const filteredByLanguage = allBlogPosts.filter((post) =>
+		isCurrentLanguagePost(post),
+	);
+
+	const sorted = filteredByLanguage.sort((a, b) => {
 		// 首先按置顶状态排序，置顶文章在前
 		if (a.data.pinned && !b.data.pinned) {
 			return -1;
@@ -85,9 +97,12 @@ export async function getTagList(): Promise<Tag[]> {
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
+	const filteredByLanguage = allBlogPosts.filter((post) =>
+		isCurrentLanguagePost(post),
+	);
 
 	const countMap: Record<string, number> = {};
-	allBlogPosts.forEach((post: { data: { tags: string[] } }) => {
+	filteredByLanguage.forEach((post: { data: { tags: string[] } }) => {
 		post.data.tags.forEach((tag: string) => {
 			if (!countMap[tag]) {
 				countMap[tag] = 0;
@@ -114,8 +129,11 @@ export async function getCategoryList(): Promise<Category[]> {
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
+	const filteredByLanguage = allBlogPosts.filter((post) =>
+		isCurrentLanguagePost(post),
+	);
 	const count: Record<string, number> = {};
-	allBlogPosts.forEach((post: { data: { category: string | null } }) => {
+	filteredByLanguage.forEach((post: { data: { category: string | null } }) => {
 		if (!post.data.category) {
 			const ucKey = i18n(I18nKey.uncategorized);
 			count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1;

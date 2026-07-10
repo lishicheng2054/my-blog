@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 
 import { commentConfig } from "@/config";
+import { getPostPathWithoutLanguage } from "@/utils/localized-url";
 import { removeFileExtension } from "@/utils/url-utils";
 
 import Giscus from "./Giscus.astro";
@@ -15,7 +16,7 @@ interface Props {
 const { post, path: customPath } = Astro.props as Props;
 
 const path = post
-	? `/posts/${removeFileExtension(post.id)}`
+	? `/posts/${getPostPathWithoutLanguage(removeFileExtension(post.id))}`
 	: (customPath ?? "");
 // const url = `${Astro.site?.href}${path}`;
 

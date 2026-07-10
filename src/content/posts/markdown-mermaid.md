@@ -3,6 +3,8 @@ title: Markdown Mermaid
 published: 2023-10-01
 pinned: false
 description: A simple example of a Markdown blog post with Mermaid.
+lang: en
+translationKey: markdown-mermaid
 tags: [Markdown, Blogging, Mermaid]
 category: Examples
 draft: false

@@ -1,6 +1,7 @@
 import type { CollectionEntry } from "astro:content";
 
 import { permalinkConfig } from "../config";
+import { getPostPathWithoutLanguage } from "./localized-url";
 import { hasCustomPermalink, initPostIdMap } from "./permalink-utils";
 import { removeFileExtension } from "./url-utils";
 
@@ -8,7 +9,7 @@ export function buildPostPaths(blogEntries: CollectionEntry<"posts">[]) {
 	initPostIdMap(blogEntries);
 
 	return blogEntries.flatMap((entry) => {
-		const defaultSlug = removeFileExtension(entry.id);
+		const defaultSlug = getPostPathWithoutLanguage(removeFileExtension(entry.id));
 
 		if (hasCustomPermalink(entry)) {
 			return [{ params: { slug: defaultSlug }, props: { entry } }];

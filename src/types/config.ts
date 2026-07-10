@@ -62,6 +62,10 @@ export interface SiteConfig {
 		logo?: string; // 网站Logo图片路径
 	};
 
+	languageSwitch?: {
+		enable: boolean;
+	};
+
 	// 页面自动缩放配置
 	pageScaling?: {
 		enable: boolean; // 是否开启自动缩放

@@ -2,6 +2,8 @@
 title: Encrypted Post
 published: 2024-01-15
 description: This is an article for testing the page encryption feature
+lang: en
+translationKey: encrypted-post
 encrypted: true
 pinned: true
 password: "123456"

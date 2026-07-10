@@ -456,6 +456,26 @@ html {
     @apply rounded-b-[calc(var(--radius-large)-0.5rem)];
   }
 
+  .language-switch-item {
+    @apply flex items-center justify-between rounded-[calc(var(--radius-large)-0.65rem)] px-3 py-2.5 text-sm font-medium;
+    @apply text-black/75 dark:text-white/75 transition-colors duration-150;
+    @apply hover:bg-(--btn-plain-bg-hover) hover:text-(--primary);
+  }
+
+  .language-switch-item-active {
+    @apply bg-black/5 text-(--primary) dark:bg-white/8;
+  }
+
+  .language-switch-item-disabled {
+    @apply cursor-not-allowed text-black/35 dark:text-white/35;
+    @apply hover:bg-transparent hover:text-black/35 dark:hover:text-white/35;
+  }
+
+  .language-switch-badge {
+    @apply inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5;
+    @apply bg-(--btn-regular-bg) text-(--btn-content) text-[0.72rem] font-semibold;
+  }
+
   /* 移动端菜单样式 */
   .mobile-submenu {
     @apply max-h-0 overflow-hidden transition-all duration-300 ease-in-out;

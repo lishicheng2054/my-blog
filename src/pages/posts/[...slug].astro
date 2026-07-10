@@ -19,6 +19,10 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getRelatedPosts, getSortedPosts } from "@utils/content-utils";
 import { hasCustomPermalink, initPostIdMap } from "@utils/permalink-utils";
 import { getPostPublicDescription } from "@utils/post-card-content";
+import {
+	buildTranslationIndex,
+	getAlternateLanguageTargets,
+} from "@utils/post-translation";
 import { getFileDirFromPath, removeFileExtension } from "@utils/url-utils";
 import {
 	licenseConfig,
@@ -97,6 +101,8 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const { remarkPluginFrontmatter } = await render(entry);
+const translationIndex = buildTranslationIndex(await getSortedPosts());
+const languageTargets = getAlternateLanguageTargets(translationIndex, entry);
 
 // 获取相关文章
 const relatedPosts = relatedPostsConfig.enable
@@ -210,6 +216,8 @@ const jsonLd = {
 	title={entry.data.title}
 	description={publicDescription}
 	lang={entry.data.lang}
+	currentLanguage={entry.data.lang}
+	languageTargets={languageTargets}
 	setOGTypeArticle={true}
 	postSlug={entry.id}
 	headings={headings}

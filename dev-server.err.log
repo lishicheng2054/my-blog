@@ -1,0 +1,4 @@
+$ node scripts/sync-content.js || true
+警告：未设置 CONTENT_REPO_URL，将使用本地内容
+$ astro dev "--" "--host" "127.0.0.1" "--port" "4321"
+{"message":"Dev server failed to start within 30s.","label":"SKIP_FORMAT","level":"error"}

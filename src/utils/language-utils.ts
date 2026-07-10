@@ -1,25 +1,10 @@
+import { getLanguageDisplayNameByCode } from "../config/languageConfig.ts";
+
 /**
- * 获取语言的显示名称
- * @param langCode 语言代码（配置文件格式或翻译服务格式）
- * @returns 语言的显示名称
+ * Return a human-readable language name for built-in or external language codes.
  */
 export function getLanguageDisplayName(langCode: string): string {
-	const languageNames: Record<string, string> = {
-		zh_CN: "简体中文",
-		zh_TW: "繁體中文",
-		en: "English",
-		ja: "日本語",
-		ko: "한국어",
-		es: "Español",
-		th: "ไทย",
-		vi: "Tiếng Việt",
-		tr: "Türkçe",
-		id: "Bahasa Indonesia",
-		fr: "Français",
-		de: "Deutsch",
-		ru: "Русский",
-		ar: "العربية",
-		// 翻译服务格式
+	const externalLanguageNames: Record<string, string> = {
 		chinese_simplified: "简体中文",
 		chinese_traditional: "繁體中文",
 		english: "English",
@@ -36,5 +21,6 @@ export function getLanguageDisplayName(langCode: string): string {
 		arabic: "العربية",
 	};
 
-	return languageNames[langCode] || langCode;
+	return externalLanguageNames[langCode]
+		?? getLanguageDisplayNameByCode(langCode);
 }

@@ -3,6 +3,8 @@ title: Markdown Tutorial
 published: 2025-01-20
 pinned: true
 description: A simple example of a Markdown blog post.
+lang: en
+translationKey: markdown-tutorial
 tags: [Markdown, Blogging]
 category: Examples
 licenseName: "Unlicensed"

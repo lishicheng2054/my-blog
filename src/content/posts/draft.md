@@ -1,6 +1,8 @@
 ---
 title: Draft Example
 published: 2022-07-01
+lang: en
+translationKey: draft-example
 tags: [Markdown, Blogging, Demo]
 category: Examples
 draft: true

@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mizuki 顶部语言按钮方案</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 42px clamp(18px, 4vw, 56px) 56px;
+    color: #22283a;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(117, 149, 255, .18), transparent 28%),
+      radial-gradient(circle at 92% 12%, rgba(240, 155, 205, .16), transparent 25%),
+      #f5f7fc;
+    font-family: "Microsoft YaHei UI", "PingFang SC", sans-serif;
+  }
+
+  .page {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    font-size: clamp(26px, 3vw, 38px);
+    letter-spacing: -.035em;
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  p {
+    line-height: 1.68;
+  }
+
+  .subtitle {
+    margin: 0;
+    color: #69738d;
+  }
+
+  .cards {
+    display: grid;
+    gap: 18px;
+  }
+
+  .card {
+    border: 1px solid rgba(105, 118, 150, .15);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, .82);
+    box-shadow: 0 14px 46px rgba(62, 76, 111, .09);
+    cursor: pointer;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(109, 140, 255, .38);
+    box-shadow: 0 22px 58px rgba(62, 76, 111, .15);
+  }
+
+  .card.selected {
+    border-color: #6d8cff;
+    box-shadow: 0 0 0 4px rgba(109, 140, 255, .13), 0 22px 58px rgba(62, 76, 111, .15);
+  }
+
+  .card-body {
+    padding: 20px 21px 22px;
+  }
+
+  .card-body p {
+    min-height: 76px;
+    margin: 0;
+    color: #69738d;
+    font-size: 14px;
+  }
+
+  :root {
+    --mizuki-accent: #6d8cff;
+    --mizuki-accent-soft: rgba(109, 140, 255, 0.14);
+    --mizuki-ink: #22283a;
+    --mizuki-muted: #7b849c;
+    --mizuki-line: rgba(105, 118, 150, 0.18);
+  }
+
+  .intro {
+    max-width: 760px;
+    margin-bottom: 24px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .card {
+    overflow: visible;
+  }
+
+  .card-image {
+    min-height: 270px;
+    padding: 18px;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(113, 143, 255, 0.20), transparent 36%),
+      linear-gradient(145deg, #f7f9ff, #eef2fb);
+  }
+
+  .scene {
+    position: relative;
+    min-height: 226px;
+    padding: 22px 14px;
+    border-radius: 22px;
+    overflow: hidden;
+    background:
+      linear-gradient(rgba(255,255,255,.68), rgba(255,255,255,.68)),
+      linear-gradient(135deg, #dce6ff, #fff2f8);
+    border: 1px solid rgba(255,255,255,.85);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+  }
+
+  .scene::after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    right: -60px;
+    bottom: -78px;
+    border-radius: 999px;
+    background: rgba(123, 153, 255, .16);
+    filter: blur(1px);
+  }
+
+  .mini-navbar {
+    position: relative;
+    z-index: 2;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px 0 14px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,.82);
+    background: rgba(255,255,255,.78);
+    box-shadow: 0 14px 38px rgba(74, 91, 133, .14);
+    backdrop-filter: blur(16px);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--mizuki-ink);
+    font-weight: 750;
+    font-size: 13px;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    color: white;
+    background: linear-gradient(135deg, #7d98ff, #9a79ef);
+    box-shadow: 0 6px 14px rgba(109, 140, 255, .28);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .icon-button,
+  .language-button {
+    height: 38px;
+    min-width: 38px;
+    border: 0;
+    color: #566078;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+
+  .language-button {
+    position: relative;
+    color: #405078;
+    background: var(--mizuki-accent-soft);
+    box-shadow: inset 0 0 0 1px rgba(109, 140, 255, .12);
+  }
+
+  .language-button:hover {
+    color: #4664d9;
+    background: rgba(109, 140, 255, .20);
+    transform: translateY(-1px);
+  }
+
+  .language-button:focus-visible {
+    outline: 3px solid rgba(109, 140, 255, .28);
+    outline-offset: 2px;
+  }
+
+  .language-button.icon-only {
+    width: 38px;
+  }
+
+  .language-button.compact {
+    min-width: 56px;
+    padding: 0 9px;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 750;
+  }
+
+  .language-button.segmented {
+    min-width: 76px;
+    padding: 0 9px;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 750;
+  }
+
+  .lang-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(86, 96, 120, .24);
+  }
+
+  .menu-preview {
+    position: relative;
+    z-index: 3;
+    width: 164px;
+    margin: 12px 8px 0 auto;
+    padding: 7px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.91);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: 0 18px 48px rgba(61, 74, 109, .18);
+    backdrop-filter: blur(18px);
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 34px;
+    padding: 0 9px;
+    border-radius: 9px;
+    color: #59627a;
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .menu-item.active {
+    color: #4864d5;
+    background: rgba(109, 140, 255, .13);
+  }
+
+  .check {
+    width: 17px;
+    height: 17px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    color: white;
+    background: #6d8cff;
+  }
+
+  .recommend {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    border-radius: 999px;
+    color: #3f5fcf;
+    background: rgba(109,140,255,.13);
+    font-size: 11px;
+    font-weight: 750;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .meta span {
+    padding: 4px 7px;
+    border-radius: 999px;
+    color: var(--mizuki-muted);
+    background: rgba(111, 124, 154, .08);
+    font-size: 11px;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tiny-svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  @media (max-width: 980px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon-button,
+    .language-button {
+      transition: none;
+    }
+  }
+</style>
+
+<main class="page">
+<div class="intro">
+  <h2>顶部语言按钮选择</h2>
+  <p class="subtitle">三个方案都放在“显示设置”和“主题切换”之间，并沿用 Mizuki 的圆角、轻玻璃感、材质图标和 44px 点击区域。点击卡片选择你喜欢的方案。</p>
+</div>
+</main>
+
+<script>
+  function toggleSelect(card) {
+    document.querySelectorAll(".card").forEach((item) => {
+      item.classList.toggle("selected", item === card);
+    });
+  }
+</script>
+</body>
+</html>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="scene">
+        <div class="mini-navbar">
+          <div class="brand">
+            <span class="brand-mark">M</span>
+            <span>Mizuki</span>
+          </div>
+          <div class="nav-actions">
+            <button class="icon-button" aria-label="显示设置">
+              <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h4.5A4.5 4.5 0 0 0 21 8.5C21 5.5 17 3 12 3Z"/><circle cx="7.5" cy="10" r=".8"/><circle cx="9.5" cy="6.8" r=".8"/><circle cx="14" cy="6.5" r=".8"/></svg>
+            </button>
+            <button class="language-button icon-only" aria-label="切换语言">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.2 2.4 3.3 5.4 3.3 9S14.2 18.6 12 21M12 3C9.8 5.4 8.7 8.4 8.7 12S9.8 18.6 12 21"/></svg>
+            </button>
+            <button class="icon-button" aria-label="主题切换">
+              <svg viewBox="0 0 24 24"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="menu-preview">
+          <div class="menu-item active"><span>简体中文</span><span class="check">✓</span></div>
+          <div class="menu-item"><span>English</span></div>
+          <div class="menu-item"><span>日本語</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A · 纯图标按钮</h3>
+      <p>最接近当前顶部工具按钮，视觉干净、占用最小，但无法直接看出当前语言。</p>
+      <div class="meta"><span>最省空间</span><span>移动端友好</span></div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="scene">
+        <div class="mini-navbar">
+          <div class="brand">
+            <span class="brand-mark">M</span>
+            <span>Mizuki</span>
+          </div>
+          <div class="nav-actions">
+            <button class="icon-button" aria-label="显示设置">
+              <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h4.5A4.5 4.5 0 0 0 21 8.5C21 5.5 17 3 12 3Z"/><circle cx="7.5" cy="10" r=".8"/><circle cx="9.5" cy="6.8" r=".8"/><circle cx="14" cy="6.5" r=".8"/></svg>
+            </button>
+            <button class="language-button compact" aria-label="当前语言：简体中文">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.2 2.4 3.3 5.4 3.3 9S14.2 18.6 12 21"/></svg>
+              <span>中</span>
+              <svg class="tiny-svg" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></svg>
+            </button>
+            <button class="icon-button" aria-label="主题切换">
+              <svg viewBox="0 0 24 24"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="menu-preview">
+          <div class="menu-item active"><span>简体中文</span><span class="check">✓</span></div>
+          <div class="menu-item"><span>English</span></div>
+          <div class="menu-item"><span>日本語</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="recommend">推荐方案</span>
+      <h3>B · 图标 + 当前语言</h3>
+      <p>保留原主题的按钮感，同时明确显示当前语言；信息量和顶部空间之间最平衡。</p>
+      <div class="meta"><span>识别清晰</span><span>风格协调</span><span>推荐</span></div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="scene">
+        <div class="mini-navbar">
+          <div class="brand">
+            <span class="brand-mark">M</span>
+            <span>Mizuki</span>
+          </div>
+          <div class="nav-actions">
+            <button class="icon-button" aria-label="显示设置">
+              <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h4.5A4.5 4.5 0 0 0 21 8.5C21 5.5 17 3 12 3Z"/><circle cx="7.5" cy="10" r=".8"/><circle cx="9.5" cy="6.8" r=".8"/><circle cx="14" cy="6.5" r=".8"/></svg>
+            </button>
+            <button class="language-button segmented" aria-label="中英文切换">
+              <span>中</span>
+              <span class="lang-divider"></span>
+              <span>EN</span>
+            </button>
+            <button class="icon-button" aria-label="主题切换">
+              <svg viewBox="0 0 24 24"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="menu-preview">
+          <div class="menu-item active"><span>简体中文</span><span class="check">✓</span></div>
+          <div class="menu-item"><span>English</span></div>
+          <div class="menu-item"><span>日本語</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C · 双语分段按钮</h3>
+      <p>切换意图最明显，适合主要维护中英文两种语言，但占用空间更大，也弱化其他语种。</p>
+      <div class="meta"><span>操作直观</span><span>适合双语站</span></div>
+    </div>
+  </div>
+</div>

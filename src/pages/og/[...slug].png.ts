@@ -6,6 +6,7 @@ import satori from "satori";
 import sharp from "sharp";
 
 import { getPostPublicDescription } from "@/utils/post-card-content";
+import { getPostPathWithoutLanguage } from "@/utils/localized-url";
 import { removeFileExtension } from "@/utils/url-utils";
 
 import { profileConfig, siteConfig } from "../../config";
@@ -31,7 +32,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 	return publishedPosts.map((post) => {
 		// 将 id 转换为 slug（移除扩展名）以匹配路由参数
-		const slug = removeFileExtension(post.id);
+		const slug = getPostPathWithoutLanguage(removeFileExtension(post.id));
 		return {
 			params: { slug },
 			props: { post },

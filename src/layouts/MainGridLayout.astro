@@ -24,6 +24,10 @@ import {
 	getTransparencyClass,
 	shouldEnableTransparency,
 } from "../utils/grid-layout-utils";
+import {
+	getLocalizedPathname,
+	stripLanguagePrefixFromPath,
+} from "../utils/localized-url";
 import { widgetManager } from "../utils/widget-manager";
 import Layout from "./Layout.astro";
 import GridScripts from "./partials/GridScripts.astro";
@@ -33,6 +37,8 @@ interface Props {
 	banner?: string;
 	description?: string;
 	lang?: string;
+	currentLanguage?: string;
+	languageTargets?: Record<string, string | null>;
 	setOGTypeArticle?: boolean;
 	postSlug?: string;
 	headings?: MarkdownHeading[];
@@ -50,6 +56,8 @@ const {
 	banner,
 	description,
 	lang,
+	currentLanguage,
+	languageTargets,
 	setOGTypeArticle,
 	postSlug,
 	coverImage,
@@ -99,6 +107,12 @@ const transparentClass = getTransparencyClass(shouldEnable);
 
 // 布局模式
 const defaultPostListLayout = siteConfig.postListLayout?.defaultMode || "list";
+const normalizedCurrentPath = stripLanguagePrefixFromPath(Astro.url.pathname);
+const fallbackLanguageTargets = {
+	zh_CN: getLocalizedPathname("zh_CN", normalizedCurrentPath),
+	en: getLocalizedPathname("en", normalizedCurrentPath),
+};
+const resolvedLanguageTargets = languageTargets ?? fallbackLanguageTargets;
 ---
 
 <Layout
@@ -141,7 +155,10 @@ const defaultPostListLayout = siteConfig.postListLayout?.defaultMode || "list";
 			id="navbar-wrapper"
 			class="pointer-events-auto sticky top-0 transition-all"
 		>
-			<Navbar />
+			<Navbar
+				currentLanguage={currentLanguage ?? lang ?? siteConfig.lang}
+				languageTargets={resolvedLanguageTargets}
+			/>
 		</div>
 	</div>
 
